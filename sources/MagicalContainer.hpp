@@ -131,10 +131,7 @@ namespace ariel
             bool operator<(const BasicIterator &other) const;
 
             // A helper function to compare the integers that the pointers point to
-            static bool compareIntPointers(int *a, int *b)
-            {
-                return *a < *b;
-            }
+            static bool compareIntPointers(int *a, int *b);
         };
 
     public:

@@ -464,17 +464,6 @@ void MagicalContainer::PrimeIterator::swap_with_temp(PrimeIterator &temp)
     std::swap(it, temp.it);
 }
 
-// PrimeIterator copy assignment operator
-MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(const PrimeIterator &other)
-{
-    if (!is_self_assignment(other))
-    {
-        // Copy-and-swap idiom
-        PrimeIterator temp(other);
-        swap_with_temp(temp);
-    }
-    return *this;
-}
 
 // Begin function for PrimeIterator
 MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin()
