@@ -10,10 +10,10 @@
  * @author Maya Rom
  * @ID 207485251
  */
-    
 
 #pragma once
 
+#include <cstddef>
 #include <vector>
 
 namespace ariel
@@ -24,32 +24,33 @@ namespace ariel
      */
     class MagicalContainer
     {
-        std::vector<int> originalElements; // stores original insertion order
-        std::vector<int *> crossElements;  // stores element pointers in cross order
-        std::vector<int *> sortedElements; // stores element pointers in ascending order
-        std::vector<int *> primeElements;  // stores element pointers that are prime numbers in original order
+        std::vector<int> regular; // stores original insertion order
+        std::vector<int *> cross; // stores element pointers in cross order
+        std::vector<int *> sort;  // stores element pointers in ascending order
+        std::vector<int *> prime; // stores element pointers that are prime numbers in original order
 
         /**
-         * @brief Check if a number is prime.
-         * @param number The number to check.
-         * @return true if the number is prime, false otherwise.
-         */
+  * @brief Check if a number is prime.
+  * @param number The number to check.
+  * @return true if the number is prime, false otherwise.
+
+  */
         bool isPrime(int number) const;
 
         /**
          * @brief Update the cross order elements.
          */
-        void updateCrossElements();
+        void optimise_cross();
 
         /**
          * @brief Update the ascending order elements.
          */
-        void updateSortedElements();
+        void optimise_sort();
 
         /**
          * @brief Update the prime elements.
          */
-        void updatePrimeElements();
+        void optimise_prime();
 
         /**
          * @class BasicIterator
@@ -128,6 +129,12 @@ namespace ariel
              * @return true if this iterator is less than the other, false otherwise.
              */
             bool operator<(const BasicIterator &other) const;
+
+            // A helper function to compare the integers that the pointers point to
+            static bool compareIntPointers(int *a, int *b)
+            {
+                return *a < *b;
+            }
         };
 
     public:
@@ -251,6 +258,10 @@ namespace ariel
              */
             AscendingIterator end();
         };
+        // Helper functions declarations
+        void initCross(std::vector<int *> &cross);
+        void updateFromStart(std::vector<int *>::iterator &start_it, std::vector<int *> &cross);
+        void updateFromEnd(std::vector<int *>::reverse_iterator &end_it, std::vector<int *> &cross);
 
         /**
          * @class SideCrossIterator
@@ -259,6 +270,8 @@ namespace ariel
         class SideCrossIterator : public BasicIterator
         {
         public:
+            void optimise_sort();
+            void optimise_prime();
             /**
              * @brief Constructs a new SideCrossIterator object.
              * @param magicalContainer The MagicalContainer to iterate over.
@@ -310,6 +323,9 @@ namespace ariel
         class PrimeIterator : public BasicIterator
         {
         public:
+            bool is_self_assignment(const PrimeIterator &other) const;
+            void swap_with_temp(PrimeIterator &temp);
+
             /**
              * @brief Constructs a new PrimeIterator object.
              * @param magicalContainer The MagicalContainer to iterate over.
